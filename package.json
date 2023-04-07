@@ -1,6 +1,6 @@
 {
   "name": "xopyc",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Xopyc Boilerplate",
   "main": "server/index.ts",
   "repository": "https://github.com/wayoutff/xopyc",
