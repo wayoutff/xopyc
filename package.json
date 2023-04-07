@@ -24,7 +24,8 @@
     "client:build": "yarn run client:clean-dist && webpack --config=packages/compiler/production.js",
     "client:clean-dist": "rimraf dist/*",
     "client:start": "yarn run start-dev",
-    "client:dev": "webpack serve --config=packages/compiler/development.js"
+    "client:dev": "webpack serve --config=packages/compiler/development.js",
+    "version": "auto-changelog -p && git add CHANGELOG.md"
   },
   "keywords": [
     "node",
