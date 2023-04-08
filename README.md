@@ -1,4 +1,4 @@
-![Cover](./docs/logo.png)
+![Cover](./docs/logo1.png)
 
 <div align="center">
   <h1>
