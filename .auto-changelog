@@ -2,6 +2,6 @@
   "output": "CHANGELOG.md",
   "template": "keepachangelog",
   "unreleased": true,
-  "commitLimit": true,
+  "commitLimit": false,
   "strictLatest": false
 }
