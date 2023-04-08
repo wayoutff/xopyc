@@ -1,21 +1,13 @@
 {
   "compilerOptions": {
-    "allowJs": true,
-    "target": "ESNext",
-    "lib": ["ESNext"],
+    "jsx": "react-jsx",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "module": "ESNext",
     "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "inlineSourceMap": true,
-    "module": "CommonJS",
-    "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "strict": true,
-    "noImplicitAny": true,
-    "noEmit": true
+    "outDir": "dist",
+    "allowSyntheticDefaultImports": true,
+    "target": "ESNext",
+    "sourceMap": true
   },
-  "ts-node": {
-    "transpileOnly": true
-  },
-  "include": ["./server/**/*", "./tests/**/*"]
+  "include": ["src"]
 }

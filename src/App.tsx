@@ -1,7 +1,8 @@
 import React from 'react';
+import style from './styles.css'
 
 const App = () => (
-  <div>
+  <div className={style.block}>
     <p>Hello.</p>
   </div>
 );

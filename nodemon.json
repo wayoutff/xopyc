@@ -1,0 +1,7 @@
+{
+  "watch": ["server"],
+  "ext": "ts",
+  "exec": "cross-env NODE_ENV=development ts-node --files --project tsconfig.server.json server/index.ts",
+  "inspect": true,
+  "verbose": true
+}
