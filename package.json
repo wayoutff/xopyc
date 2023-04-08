@@ -25,7 +25,7 @@
     "client:clean-dist": "rimraf dist/*",
     "client:start": "yarn run start-dev",
     "client:dev": "webpack serve --config=packages/compiler/development.js",
-    "version": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md"
+    "version": "auto-changelog -p && git add CHANGELOG.md"
   },
   "keywords": [
     "node",
