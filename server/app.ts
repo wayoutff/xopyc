@@ -9,7 +9,7 @@ import * as morgan from './config/morgan';
 import { errorConverter, errorHandler } from './middlewares/error';
 import { ApiError } from './utils/ApiError';
 import connectSession from './middlewares/session.connect';
-import initAuth from '../packages/auth/server';
+import authPkg from '../packages/auth/server';
 
 const xss = require('xss-clean');
 
@@ -17,44 +17,97 @@ export const app = express();
 
 import '../packages/auth/server/config';
 
+import { pkgConnector } from '../packages/connector'
+
+let productionMiddlewares = []
+
 if (config.env !== 'test') {
-  app.use(morgan.successHandler);
-  app.use(morgan.errorHandler);
+  //@ts-ignore
+  productionMiddlewares.push(morgan.successHandler);
+  //@ts-ignore
+  productionMiddlewares.push(morgan.errorHandler);
 }
 
-// set security HTTP headers
-app.use(helmet());
+/**
+ * Array of sanitize middlewares
+ */
+const sanitizeMiddleware = [
+  xss(),
+  mongoSanitize()
+]
 
-// parse json request body
-app.use(express.json());
-
-// parse urlencoded request body
-app.use(express.urlencoded({ extended: true }));
-
-// sanitize request data
-app.use(xss());
-app.use(mongoSanitize());
-
-// gzip compression
-app.use(compression());
+/**
+ * Array of GZIP middleware
+ */
+const compressionMiddleware = [compression()]
 
 // enable cors
 app.use(cors());
 app.options('*', cors());
 
-connectSession(app);
-initAuth(app);
 
-//connect front
-app.use(express.static('dist'));
+/**
+ * Error middlewares handling
+ */
+const errorHandlerMiddlewares = [
+  errorConverter,
+  errorHandler
+]
 
-// send back a 404 error for any unknown api request
-app.use((req, res, next) => {
-  next(new ApiError(httpStatus.NOT_FOUND, 'Not found'));
-});
+pkgConnector(app, {
+  packages: {
+    connectSession,
+    authPkg: authPkg({ test: true })
+  },
+  middlewares: [
+    /**
+     * Set security HTTP headers
+     */
+    helmet(),
 
-// convert error to ApiError, if needed
-app.use(errorConverter);
+    /**
+     * Connect a Production middlewares
+     */
+    ...productionMiddlewares,
 
-// handle error
-app.use(errorHandler);
+    /**
+     * Parse json request body
+     */
+    express.json(),
+
+    /**
+     * Parse urlencoded request body
+     */
+    express.urlencoded({ extended: true }),
+
+    /**
+     * Sanitize request data
+     */
+    ...sanitizeMiddleware,
+
+    /**
+     * Gzip compression
+     */
+    ...compressionMiddleware,
+
+    /**
+     * Connect frontend bundle
+     */
+    express.static('dist'),
+
+    /**
+     * Test middleware for check current state of server
+     */
+    (req, res, next) => console.log('1',req, res, next),
+
+    /**
+     * Send back a 404 error for any unknown api request
+     */
+    (req, res, next) => next(new ApiError(httpStatus.NOT_FOUND, 'Not found')),
+
+    /**
+     * Handling Errors Middlewares
+     */
+    ...errorHandlerMiddlewares
+  ]
+})
